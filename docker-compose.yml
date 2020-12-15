@@ -1,0 +1,21 @@
+version: "3"
+services:
+  covid-api:
+    container_name: covid-api
+    restart: always
+    build: .
+    ports:
+      - "7999:3000"
+    environment:
+      - MONGO_URI=mongodb://covid-api-db:27017/covid
+      - URL_PROVINCE=https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-province.json
+      - URL_REGIONI=https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-regioni.json
+    links:
+      - mongo
+  mongo:
+    container_name: covid-api-db
+    image: mongo
+    environment:
+      - MONGO_INITDB_DATABASE=covid
+    ports:
+      - "7777:27017"
